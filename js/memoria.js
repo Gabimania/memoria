@@ -9,6 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let firstCard = null;
   let secondCard = null;
   let lock = false;
+  let matchCount = 0;
+  let mistakesCount = 0;
+  let clicCount = 0;
+  let startTime;
+  let interval;
 
   startGameButton.addEventListener("click", startGame);
 
@@ -18,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     totalClics.textContent = "Total de Clics: 0";
     timer.textContent = "Tiempo 00:00";
     gameBoard.innerHTML = "";
+
+    startTime= Date.now();
 
     const images = [
       "fisio.jpg",
@@ -53,6 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       gameBoard.appendChild(card);
     }
+
+    interval = setInterval(updateTimer, 1000);
+
   }
 
   function flipCard() {
@@ -60,6 +70,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const card = this;
     if (card.dataset.flipped === "true") return;
+
+    clicCount++;
+    totalClics.textContent = `Total de Clics: ${clicCount}`;
 
     let img = card.querySelector("img");
     img.src = `img/${card.dataset.image}`;
@@ -71,16 +84,20 @@ document.addEventListener("DOMContentLoaded", () => {
         secondCard = card;
         lock = true;
 
-        setTimeout(checkForMath, 1000);
+        setTimeout(checkForMatch, 1000);
     }
 
   }
 
-  function checkForMath(){
+  function checkForMatch(){
     if(firstCard.dataset.image === secondCard.dataset.image){
+        matchCount++;
+        matches.textContent = `Aciertos: ${matchCount}`;
         firstCard.removeEventListener('click', flipCard);
         secondCard.removeEventListener('click', flipCard);
     }else{
+        mistakesCount++;
+        mistakes.textContent = `Errores: ${mistakesCount}`;
         firstCard.querySelector('img').src = 'img/carta.jpg';
         secondCard.querySelector('img').src= 'img/carta.jpg';
         firstCard.dataset.flipped = 'false';
@@ -97,5 +114,12 @@ document.addEventListener("DOMContentLoaded", () => {
       let j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
+  }
+
+  function updateTimer(){
+    let gameTime = Math.floor((Date.now()-startTime)/1000);
+    let minutes = String(Math.floor(gameTime/60)).padStart(2,'0');
+    let seconds = String(gameTime%60).padStart(2, '0');
+    timer.textContent= `Tiempo: ${minutes}:${seconds}`;
   }
 });
