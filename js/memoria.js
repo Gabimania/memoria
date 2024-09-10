@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
     timer.textContent = "Tiempo 00:00";
     gameBoard.innerHTML = "";
 
+    clicCount= 0;
+    matchCount = 0;
+    mistakesCount= 0;
+
     startTime = Date.now();
 
     const images = [
