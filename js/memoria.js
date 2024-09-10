@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let clicCount = 0;
   let startTime;
   let interval;
+  let totalPairs = 8;
 
   startGameButton.addEventListener("click", startGame);
 
@@ -95,6 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
         matches.textContent = `Aciertos: ${matchCount}`;
         firstCard.removeEventListener('click', flipCard);
         secondCard.removeEventListener('click', flipCard);
+
+        if(matchCount===totalPairs){
+            clearInterval(interval);
+        }
     }else{
         mistakesCount++;
         mistakes.textContent = `Errores: ${mistakesCount}`;
