@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timer.textContent = "Tiempo 00:00";
     gameBoard.innerHTML = "";
 
-    startTime= Date.now();
+    startTime = Date.now();
 
     const images = [
       "fisio.jpg",
@@ -63,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     interval = setInterval(updateTimer, 1000);
-
   }
 
   function flipCard() {
@@ -79,39 +78,46 @@ document.addEventListener("DOMContentLoaded", () => {
     img.src = `img/${card.dataset.image}`;
     card.dataset.flipped = "true";
 
-    if(!firstCard){
-        firstCard = card;
-    }else{
-        secondCard = card;
-        lock = true;
+    if (!firstCard) {
+      firstCard = card;
+    } else {
+      secondCard = card;
+      lock = true;
 
-        setTimeout(checkForMatch, 1000);
+      setTimeout(checkForMatch, 1000);
     }
-
   }
 
-  function checkForMatch(){
-    if(firstCard.dataset.image === secondCard.dataset.image){
-        matchCount++;
-        matches.textContent = `Aciertos: ${matchCount}`;
-        firstCard.removeEventListener('click', flipCard);
-        secondCard.removeEventListener('click', flipCard);
+  function checkForMatch() {
+    if (firstCard.dataset.image === secondCard.dataset.image) {
+      matchCount++;
+      matches.textContent = `Aciertos: ${matchCount}`;
+      firstCard.removeEventListener("click", flipCard);
+      secondCard.removeEventListener("click", flipCard);
 
-        if(matchCount===totalPairs){
-            clearInterval(interval);
-        }
-    }else{
-        mistakesCount++;
-        mistakes.textContent = `Errores: ${mistakesCount}`;
-        firstCard.querySelector('img').src = 'img/carta.jpg';
-        secondCard.querySelector('img').src= 'img/carta.jpg';
-        firstCard.dataset.flipped = 'false';
-        secondCard.dataset.flipped = 'false';
+      if (matchCount === totalPairs) {
+        clearInterval(interval);
+        setTimeout(() => {
+          let playAgain = confirm(
+            "Has conseguido encontrar todas las parejas. ¿Quieres echar otra partida?"
+          );
+          if (playAgain) {
+            startGame();
+          }
+        }, 100);
+      }
+    } else {
+      mistakesCount++;
+      mistakes.textContent = `Errores: ${mistakesCount}`;
+      firstCard.querySelector("img").src = "img/carta.jpg";
+      secondCard.querySelector("img").src = "img/carta.jpg";
+      firstCard.dataset.flipped = "false";
+      secondCard.dataset.flipped = "false";
     }
 
     firstCard = null;
     secondCard = null;
-    lock= false;
+    lock = false;
   }
 
   function shuffle(array) {
@@ -121,10 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function updateTimer(){
-    let gameTime = Math.floor((Date.now()-startTime)/1000);
-    let minutes = String(Math.floor(gameTime/60)).padStart(2,'0');
-    let seconds = String(gameTime%60).padStart(2, '0');
-    timer.textContent= `Tiempo: ${minutes}:${seconds}`;
+  function updateTimer() {
+    let gameTime = Math.floor((Date.now() - startTime) / 1000);
+    let minutes = String(Math.floor(gameTime / 60)).padStart(2, "0");
+    let seconds = String(gameTime % 60).padStart(2, "0");
+    timer.textContent = `Tiempo: ${minutes}:${seconds}`;
   }
 });
